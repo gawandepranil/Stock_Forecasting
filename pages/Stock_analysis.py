@@ -11,7 +11,7 @@ from pages.utils.plotly_figure import (
     candlestick,
     RSI,
     MACD,
-    Moving_average
+    Moving_average_stock
 )
 
 
@@ -136,7 +136,7 @@ if num_period=="":
         st.plotly_chart(RSI(data1,"1y"),use_container_width=True)
 
     if chart_type=="Line" and indicators =="MOVING AVERAGE":
-        st.plotly_chart(Moving_average(data1,"1y"),use_container_width=True)
+        st.plotly_chart(Moving_average_stock(data1,"1y"),use_container_width=True)
 
     if chart_type=="Line" and indicators =="MACD":
         st.plotly_chart(close_chart(data1,"1y"),use_container_width=True)
@@ -162,5 +162,5 @@ else:
         st.plotly_chart(MACD(new_df1,num_period),use_container_width=True)
 
     if chart_type=="Line" and indicators == "MOVING AVERAGE":
-        st.plotly_chart(Moving_average(new_df1,num_period),use_container_width=True)
+        st.plotly_chart(Moving_average_stock(new_df1,num_period),use_container_width=True)
         

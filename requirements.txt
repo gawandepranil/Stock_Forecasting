@@ -6,3 +6,5 @@ yfinance
 pandas-ta
 ta
 python-dateutil
+statsmodels
+scikit-learn

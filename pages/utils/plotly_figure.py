@@ -119,7 +119,7 @@ def RSI(dataframe, num_period) :
         ))
     return fig
 
-def Moving_average(dataframe,num_period):
+def Moving_average_stock(dataframe,num_period):
     dataframe['SMA_50'] = pta.sma(dataframe['Close'],50) 
     dataframe = filter_data(dataframe,num_period) 
     fig = go.Figure()  
@@ -134,8 +134,34 @@ def Moving_average(dataframe,num_period):
     xanchor="right"
     ))
     return fig
+def moving_average_forecast(df, window):
 
+    df = df.copy()
+    df = df.reset_index()   # VERY IMPORTANT
 
+    # Now index becomes a column
+    date_col = df.columns[0]   # first column will be Date
+    value_col = 'Close'
+
+    df['SMA'] = df[value_col].rolling(window).mean()
+
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(
+        x=df[date_col],
+        y=df[value_col],
+        mode='lines',
+        name='Forecast'
+    ))
+
+    fig.add_trace(go.Scatter(
+        x=df[date_col],
+        y=df['SMA'],
+        mode='lines',
+        name=f'SMA {window}'
+    ))
+
+    return fig
 
 def MACD(dataframe, num_period): 
     macd = pta.macd(dataframe['Close']).iloc[:,0] 

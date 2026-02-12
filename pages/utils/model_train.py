@@ -9,7 +9,13 @@ from sklearn.preprocessing import StandardScaler
 
 def get_data(ticker):
     stock_data=yf.download(ticker,start="2024-01-01")
-    return stock_data[["Close"]]
+    close = stock_data["Close"]
+    close.index = pd.to_datetime(close.index)
+    close = close.sort_index()
+    close = close.asfreq("B").ffill()
+    close.index.name = "Date"
+
+    return close
 def stationary_check(close_price):
     adf_test=adfuller(close_price)
     p_value=round(adf_test[1],3)
@@ -18,39 +24,36 @@ def stationary_check(close_price):
 def get_rolling_mean(close_price):
     rolling_price=close_price.rolling(window=7).mean().dropna()
     return rolling_price
+
 def get_differenceing_order(close_price):
-    p_value=stationary_check(close_price)
-    d=0
-    while True:
-        if p_value >0.5:
-            d+=1
-            close_price=close_price.diff().dropna()
-            p_value=stationary_check(close_price)
-        else:
-            break
-        return d
+    p_value = stationary_check(close_price)
+    d = 0
     
-def fit_model(data,differencing_order):
-    model=ARIMA(data,order=(30,differencing_order,30))
-    model_fit=model.fit()
+    while p_value > 0.05 and d<3 :
+        d += 1
+        close_price = close_price.diff().dropna()
+        p_value = stationary_check(close_price)
     
-    forecast_steps=30
-    forecast=model_fit.get_forecast(steps=forecast_steps)
+    return d
     
-    predictions=forecast.predicted_mean
+def fit_model(data, differencing_order):
+
+    model = ARIMA(data, order=(2, differencing_order, 2))
+    model_fit = model.fit()
+
+    forecast = model_fit.get_forecast(steps=30)
+    predictions = forecast.predicted_mean
     return predictions
 
 def evaluate_model(original_price,differencing_order):
     train_data,test_data=original_price[:-30],original_price[-30:]
     predictions=fit_model(train_data,differencing_order)
-    rmse=np.sqrt(mean_squared_error(test_data,predictions))
+    predictions = predictions.reindex(test_data.index)
+    rmse=np.sqrt(mean_squared_error(test_data.dropna(),predictions.dropna()))
     return round(rmse,2)
 
-
-def scaling(close_price):
-    scaler=StandardScaler()
-    scaled_data=scaler.fit_transform(np.array(close_price).reshape(-1,1))
-    return scaled_data,scaler
-
-
-def get_forcast(original_price,differencing_order):
+def get_forecast(original_price, differencing_order):
+    predictions = fit_model(original_price, differencing_order)
+    forecast_df = predictions.to_frame(name="Close")
+    forecast_df.index.name = "Date"
+    return forecast_df
