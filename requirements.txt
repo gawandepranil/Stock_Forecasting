@@ -1,7 +1,8 @@
 streamlit
 pandas
-pandas_ta
+numpy
 plotly
 yfinance
+pandas-ta
 ta
-
+python-dateutil
