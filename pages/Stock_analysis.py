@@ -52,13 +52,13 @@ with col1:
         stock.info["trailingPE"]
         ]
     fig_df=plotly_table(df)
-    st.plotly_chart(fig_df,use_container_width=True)
+    st.plotly_chart(fig_df,width="stretch")
 
 with col2: 
     df = pd. DataFrame(index = ['Qucik Ratio', 'Revenue per share','Profit Margins', 'Debt to Equity', 'Return on Equity']) 
     df[""] = [stock.info["quickRatio"],stock.info["revenuePerShare"],stock.info["profitMargins"], stock.info["debtToEquity"],stock.info["returnOnEquity"]]
     fig_df = plotly_table(df) 
-    st.plotly_chart(fig_df, use_container_width=True) 
+    st.plotly_chart(fig_df, width="stretch") 
 
 
 data=yf.download(ticker,start=start_date,end=end_date)
@@ -72,7 +72,7 @@ col1.metric("Daily chnage",str(round(data["Close"].iloc[-1],2)),str(round(daily_
 last_10_df=data.tail(10).sort_index(ascending=False).round(3)
 fig_df = plotly_table(last_10_df) 
 st.write("#### Historical Data (Last 10 days)")
-st.plotly_chart(fig_df, use_container_width=True) 
+st.plotly_chart(fig_df,width="stretch") 
 
 if "num_period" not in st.session_state:
     st.session_state.num_period = "1y"
@@ -124,19 +124,19 @@ new_df1=ticker_.history(period="max")
 data1=ticker_.history(period="max")
 if num_period=="":
     if chart_type=="Candle" and indicators =="RSI":
-        st.plotly_chart(candlestick(data1,"1y"),use_container_width=True)
-        st.plotly_chart(RSI(data1,"1y"),use_container_width=True)
+        st.plotly_chart(candlestick(data1,"1y"),width="stretch")
+        st.plotly_chart(RSI(data1,"1y"),width="stretch")
 
     if chart_type=="Candle" and indicators =="MACD":
-        st.plotly_chart(candlestick(data1,"1y"),use_container_width=True)
-        st.plotly_chart(MACD(data1,"1y"),use_container_width=True)
+        st.plotly_chart(candlestick(data1,"1y"),width="stretch")
+        st.plotly_chart(MACD(data1,"1y"),width="stretch")
         
     if chart_type=="Line" and indicators =="RSI":
-        st.plotly_chart(close_chart(data1,"1y"),use_container_width=True)
-        st.plotly_chart(RSI(data1,"1y"),use_container_width=True)
+        st.plotly_chart(close_chart(data1,"1y"),width="stretch")
+        st.plotly_chart(RSI(data1,"1y"),width="stretch")
 
     if chart_type=="Line" and indicators =="MOVING AVERAGE":
-        st.plotly_chart(Moving_average_stock(data1,"1y"),use_container_width=True)
+        st.plotly_chart(Moving_average_stock(data1,"1y"),width="stretch")
 
     if chart_type=="Line" and indicators =="MACD":
         st.plotly_chart(close_chart(data1,"1y"),use_container_width=True)
@@ -146,21 +146,21 @@ if num_period=="":
 
 else:
     if chart_type=="Candle" and indicators == "RSI":
-        st.plotly_chart(candlestick(new_df1,num_period),use_container_width=True)
-        st.plotly_chart(RSI(new_df1,num_period),use_container_width=True)
+        st.plotly_chart(candlestick(new_df1,num_period),width="stretch")
+        st.plotly_chart(RSI(new_df1,num_period),width="stretch")
 
     if chart_type=="Candle" and indicators == "MACD":
-        st.plotly_chart(candlestick(new_df1,num_period),use_container_width=True)
-        st.plotly_chart(MACD(new_df1,num_period),use_container_width=True)
+        st.plotly_chart(candlestick(new_df1,num_period),width="stretch")
+        st.plotly_chart(MACD(new_df1,num_period),width="stretch")
     
     if chart_type=="Line" and indicators == "RSI":
-        st.plotly_chart(close_chart(new_df1,num_period),use_container_width=True)
-        st.plotly_chart(RSI(new_df1,num_period),use_container_width=True)
+        st.plotly_chart(close_chart(new_df1,num_period),width="stretch")
+        st.plotly_chart(RSI(new_df1,num_period),width="stretch")
 
     if chart_type=="Line" and indicators == "MACD":
-        st.plotly_chart(close_chart(new_df1,num_period),use_container_width=True)
-        st.plotly_chart(MACD(new_df1,num_period),use_container_width=True)
+        st.plotly_chart(close_chart(new_df1,num_period),width="stretch")
+        st.plotly_chart(MACD(new_df1,num_period),width="stretch")
 
     if chart_type=="Line" and indicators == "MOVING AVERAGE":
-        st.plotly_chart(Moving_average_stock(new_df1,num_period),use_container_width=True)
+        st.plotly_chart(Moving_average_stock(new_df1,num_period),width="stretch")
         

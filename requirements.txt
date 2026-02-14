@@ -1,6 +1,7 @@
 streamlit
 pandas
 numpy
+pmdarima
 plotly
 yfinance
 pandas-ta

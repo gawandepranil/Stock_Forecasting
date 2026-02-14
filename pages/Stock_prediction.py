@@ -20,7 +20,7 @@ st.subheader("predicting next 30 days close price for:"+ticker)
 
 close_price=get_data(ticker)
 differenceing_order = get_differenceing_order(close_price)
-rmse=evaluate_model(close_price,differenceing_order)
+rmse=evaluate_model(close_price,differenceing_order,test_days=5)
 
 st.write("**Model RMSE score:**",rmse)
 forecast=get_forecast(close_price,differenceing_order)
@@ -30,5 +30,4 @@ fig_tail=plotly_table(forecast.sort_index(ascending=True).round(3))
 fig_tail.update_layout(height=220)
 st.plotly_chart(fig_tail,width="stretch")
 
-
-st.plotly_chart(moving_average_forecast(forecast,30),use_container_width=True    )
+st.plotly_chart(moving_average_forecast(forecast,30),width="stretch")
